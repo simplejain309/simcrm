@@ -1,0 +1,30 @@
+	<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Gateway to Charles Sturt University - Stale Request</title>
+        <link rel="stylesheet" type="text/css" href="/idp/css/main.css">
+    </head>
+  	
+    <body>
+    <div class="wrapper">
+    	<div class="container">
+        	<header>
+				<img src="/idp/images/CSU-Logo-Horizontal.png" alt="Charles Sturt University">
+				<h3>Gateway to Charles Sturt University - Stale Request</h3>
+			</header>
+		
+        	<div class="content">
+<h4>You may be seeing this page because</h4><ul><li>the Back button was used while browsing a secure web site or application</li><li>a login screen was bookmarked or provided instead of the actual web site address</li><li>a link was opened from a Microsoft Office product (e.g., Word, Excel, Outlook)</li></ul> <p>You may need to manually enter the address of your web site or application into your browser's address bar, or check and update any bookmarks or links.</p><p>If you clicked on a link in a Microsoft Office product: copy the link from your  document, open a web browser, and paste the link into your address bar.</p>            </div>
+    	</div>
+
+      	<footer>
+        	<div class="container container-footer">
+          		<p class="footer-text">Copyright &copy 2016-<script>document.write(new Date().getFullYear())</script> Charles Sturt University CRICOS 00005F</p>
+        	</div>
+      	</footer>
+      	
+    </div>
+    </body>
+</html>

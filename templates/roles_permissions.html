@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+	<meta name="author" content="AdminKit">
+	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+	<link rel="shortcut icon" href="{% static 'img/icons/icon-48x48.png' %}" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+	<title>CRM</title>
+
+	<link href="{% static 'css/app.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+	{% if user.is_authenticated %}
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="{%  url 'dashboard' %}">
+          <span class="align-middle">Requin</span>
+        </a>
+
+				<ul class="sidebar-nav">
+					<li class="sidebar-header">
+						Pages
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'dashboard' %}">
+              				<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+            			</a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/profile/{{ user.username }}">
+              				<i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+            			</a>
+					</li>
+
+					{% if perms.auth.view_user or perms.crmApp.view_role %}
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="{% url 'settings' %}">
+              				<i class="align-middle" data-feather="settings"></i> 
+							  	<span class="align-middle">Settings</span>
+            			</a>
+					</li>
+					{% endif %}
+					
+					{% if perms.crmApp.view_client %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_clients_cards' %}">
+              				<i class="align-middle" data-feather="users"></i> 
+							  	<span class="align-middle">Clients</span>
+            			</a>
+					</li>
+					{% endif %}
+
+                    {% if perms.crmApp.view_task %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_tasks' %}">
+              				<i class="align-middle" data-feather="book"></i> 
+							  	<span class="align-middle">Tasks</span>
+            			</a>
+					</li>
+					{% else %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="show_particular_task/{{ user.username }}">
+              				<i class="align-middle" data-feather="book"></i> 
+							  	<span class="align-middle">Tasks</span>
+            			</a>
+					</li>
+					{% endif %}
+
+					{% if perms.crmApp.view_grouptable and perms.crmApp.add_grouptable %}
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="/show_groups/{{ user.username }}">
+              				<i class="align-middle" data-feather="users"></i> 
+							  	<span class="align-middle">Groups</span>
+            			</a>
+					</li>
+					{% elif perms.crmApp.view_grouptable %}
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="/show_tl_group/{{ user.username }}">
+              				<i class="align-middle" data-feather="users"></i> 
+							  	<span class="align-middle">My Group</span>
+            			</a>
+					</li>
+					{% endif %}
+
+					{% if perms.crmApp.view_payment %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_payments' %}">
+              				<i class="align-middle" data-feather="dollar-sign"></i> 
+							  	<span class="align-middle">Payments</span>
+            			</a>
+					</li>
+					{% endif %}
+					
+					{% if perms.crmApp.view_employee %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_employee_cards' %}">
+              				<i class="align-middle" data-feather="slack"></i> 
+							  	<span class="align-middle">Employees</span>
+            			</a>
+					</li>
+					{% endif %}
+					
+					{% if perms.crmApp.view_attendance_table %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_attendance' %}">
+              				<i class="align-middle" data-feather="activity"></i> 
+							  	<span class="align-middle">Attendance</span>
+            			</a>
+					</li>
+					{% endif %}
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="maps">
+              				<i class="align-middle" data-feather ="map"></i> 
+							  	<span class="align-middle">Maps</span>
+            			</a>
+					</li>
+			</div>
+		</nav>
+
+        
+		<div class="main">
+			<nav class="navbar navbar-expand navbar-light navbar-bg">
+				<a class="sidebar-toggle d-flex">
+          <i class="hamburger align-self-center"></i>
+        </a>
+
+				<form class="d-none d-sm-inline-block">
+					<div class="input-group input-group-navbar">
+						<input type="text" class="form-control" placeholder="Search…" aria-label="Search">
+						<button class="btn" type="button">
+              <i class="align-middle" data-feather="search"></i>
+            </button>
+					</div>
+				</form>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav navbar-align">
+
+			<!-- ====================================Notification Bell icon ================================== -->
+					
+			<li class="nav-item dropdown">
+				<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown">
+					<div class="position-relative">
+						<i class="align-middle" data-feather="bell"></i>
+						<span id="indicator" class="indicator"></span>
+					</div>
+				</a>
+				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0" aria-labelledby="alertsDropdown">
+
+					<div class="dropdown-menu-header">
+						 Notifications
+					</div>
+
+					<div id="main_div" class="list-group">
+						
+
+					</div>
+				</div>
+			</li>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			function lw(){
+
+				$.ajax({
+					data: $(this).serialize(), // get the form data
+					url: "{% url 'show_notifications' %}",
+					// on success
+					success: function (response) {
+
+						document.getElementById("indicator").innerHTML = response.counts
+						document.getElementById("main_div").innerHTML = ""
+						for (let i = 0; i < response.all_users.length; i++) {
+							
+							var row_div = document.createElement("div")
+							var row_id = "row_div"+i;
+							row_div.setAttribute("id",row_id);
+							document.getElementById("main_div").appendChild(row_div)
+							document.getElementById(row_id).classList.remove("row");
+							document.getElementById(row_id).classList.remove("g-0");
+							document.getElementById(row_id).classList.remove("align-items-center");
+							document.getElementById(row_id).className += "row";
+							document.getElementById(row_id).className += " g-0";
+							document.getElementById(row_id).className += " align-items-center";
+
+							var col_div2 = document.createElement("div")
+							var col_id2 = "col_div2_"+i;
+							col_div2.setAttribute("id",col_id2);
+							document.getElementById(row_id).appendChild(col_div2)
+							document.getElementById(col_id2).classList.remove("col");
+							document.getElementById(col_id2).classList.remove("align-items-center");
+							document.getElementById(col_id2).className += "col";
+							document.getElementById(col_id2).className += " align-items-center";
+							document.getElementById(col_id2).style.paddingLeft = "20px";
+
+							var btn = document.createElement("P");
+							var ids = "id"+i;
+							btn.setAttribute("id", ids);
+							document.getElementById(col_id2).appendChild(btn);
+							document.getElementById(ids).classList.remove("text-dark");
+							document.getElementById(ids).className += "text-dark";
+
+							var btn1 = document.createElement("P");
+							var idss = "ids"+i;
+							btn1.setAttribute("id", idss);
+							document.getElementById(col_id2).appendChild(btn1);
+							document.getElementById(idss).classList.remove("text-muted");
+							document.getElementById(idss).className += "text-muted";
+
+							document.getElementById(ids).innerHTML=""
+							document.getElementById(idss).innerHTML=""
+
+							document.getElementById(ids).innerHTML = response.all_users[i]['fields']['message']
+
+							document.getElementById(idss).innerHTML = "At: "+ response.all_users[i]['fields']['m_time']
+
+							var links = document.createElement("A");
+							links.innerHTML = "     Mark as Read";
+							links.setAttribute("href","javascript:mark("+response.all_users[i]['pk']+");")
+							var link_id = "mark_link"+i;
+							links.setAttribute("id",link_id)
+							var req_link = "javascript:mark("+response.all_users[i]['pk']+");"
+				
+							document.getElementById(idss).appendChild(links);
+
+						}
+
+					},
+					
+					error: function (response) {
+						
+						console.log(response.responseJSON.errors)
+					}
+				});
+
+				return false;
+			}
+		</script>
+
+		<script>
+
+			lw();
+			setInterval(function(){	lw(); },5000);
+
+		</script>
+
+		<script>
+		function mark(pk_id){
+			$.ajax({
+					data: $(this).serialize(), // get the form data
+					url: "/mark_read/"+pk_id,
+					// on success
+					success: function (response) {
+						
+						if (response.marked == true) {
+							
+							alert("Notification Read");
+							
+						}
+						else {
+
+							alert("Failure");
+						}
+
+					},
+					// on error
+					error: function (response) {
+						// alert the error if any error occured
+						console.log(response.responseJSON.errors)
+					}
+				});
+
+		}
+		</script>
+
+<!-- ====================================Notification Bell icon Stops ================================== -->
+						
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-toggle="dropdown">
+                				<i class="align-middle" data-feather="settings"></i>
+              				</a>
+
+							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">{{ user.username }}&nbsp;
+                				 
+									<span class="text-dark" data-feather="user">{{ user.username }}</span>
+              				</a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile</a>
+								<a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="pie-chart"></i> Analytics</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="pages-settings.html"><i class="align-middle mr-1" data-feather="settings"></i> Settings & Privacy</a>
+								<a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="help-circle"></i> Help Center</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+							</div>
+						</li>
+						
+					</ul>
+				</div>
+			</nav>
+
+			<main class="content">
+				<div class="container-fluid p-0">
+					
+					<h1 class="h3 mb-3"><strong>All Roles</strong></h1>
+
+					<div class="col-12 ">
+						<div class="card " style="padding:20px 10px 20px 10px;">
+							<div class="table-responsive">
+							<table id="example" class="table  table-stripped table-hover  " >
+								
+								<thead class="thead-dark">
+									
+									<tr>
+										<th style="width: 30%;">Role</th>
+										<th style="width: 30%;">Permissions</th>
+										<th></th>
+
+									</tr>
+								</thead>
+								
+								<tbody>
+									{% for i in groups %}
+									<tr>
+								
+										<td style="vertical-align: top;">
+											{{ i }}
+										</td>
+										
+										<td style="width: 100%">
+										{% for j in i.permissions.all %}
+											<p>{{ j|cut:"auth"|cut:"admin"|cut:"crmApp"|cut:"sessions"|cut:"contenttypes"|cut:"|" }}</p>
+										{% endfor %}
+										</td>
+										
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+		
+
+
+<!-- ============================================================================================================= -->
+				</div>
+                    <div class="create">
+                        <a class="btn-1 " href="create_role_group" style="padding: 0,0,0,0;">
+                            <div class="text">Create Role</div>
+                        </a>
+                    </div>
+				</div>
+					
+                    {% comment %} <div class="create_role" >
+						<div class="row">
+							<div class="col-12 ">
+								<div class="card">
+									<div class="card-header" style="background-color:#222e3c">
+										<div class="row">
+											<div class = "col-6">
+												<h5 class="card-title" style="font-size: medium; font-weight: bold; color: white">Create Role</h5>
+											</div>
+											<div class = "col-6" style="background-color:#222e3c">
+												<div class="close_form " style ="margin-left: 35vw;">
+													<i class="fas fa-times fa-lg" style="color: white;"></i>
+												</div>
+											</div>		
+										</div>
+										
+									</div>	 {% endcomment %}
+
+{% comment %} 									
+									<div class="card-body" style="background-color:#f7f7fc;">
+										
+										<form action="create_role" method="POST">
+											{% csrf_token %}
+											<div class="mb-3">
+												<input type="name" name="role_name" class="form-control" placeholder="Enter Role Name" style="width: min-content;">
+											</div>
+<!-------------------------------------------------------client permissions  ---------------------------------------------------------------- -->
+											<hr>
+											<div class="row">
+												<div class="col-sm-4">
+													<h3>Client Permissions</h3>
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Create Client" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Create Client</h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to create new Client</h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Update Client" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Update Client </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to Update Client details </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-sm-4">
+													
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="View Client" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;"> View Client </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to view all details of Clients </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+<!-------------------------------------------------------Task permissions  ---------------------------------------------------------------------------------------------------------------------->
+
+											<hr>
+											<div class="row">
+												<div class="col-sm-4">
+													<h3>Task Permissions</h3>
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Create Task" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Create Task </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to create new Task for Clients</h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Update Task" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Update Task </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to Update Task details for specific Clients </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-sm-4">
+													
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="View Tasks" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;"> View Tasks </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to view all details of Client Tasks </h5>
+															
+														</div>
+													</div>
+												</div>
+											
+											
+				
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Upload Briefs" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;"> Upload Briefs </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to Upload Task Briefs for reference </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-4">
+													
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Upload Solution" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;"> Upload Solution </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to Upload Solution files for Tasks </h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Delete Task" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Delete Task </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to delete Task </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+<!-------------------------------------------------------Payment permissions  ---------------------------------------------------------------------------------------------------------------------->
+
+											<hr>
+											<div class="row">
+												<div class="col-sm-4">
+													<h3>Payment  Permissions</h3>
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="View Payment" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" > 
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">View Payment </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to view payment details</h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Edit Payment" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Edit Payment </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to Edit Payment  details </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+<!-------------------------------------------------------Employee permissions  ---------------------------------------------------------------------------------------------------------------------->
+
+											<hr>
+
+											<div class="row">
+												<div class="col-sm-4">
+													<h3>Employee Permissions</h3>
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Create Employee" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;"> Create Employee </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to  Create New Employee </h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Edit Employee" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Edit Employee </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to Edit Employee  details </h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Delete Employee" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">  Delete Employee </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to Delete Employee </h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="View Employee" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">View Employee </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to view all Employee details </h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Assign Task" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Assign Task </h2>
+																</label>
+															</div>
+															
+															<h5 class=" mb-3">Be able to Assign tasks to Employees </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+										
+											<hr> {% endcomment %}
+<!-------------------------------------------------------User permissions  ----------------------------------------------------------------->
+											
+											{% comment %} <div class="row">
+												<div class="col-sm-4">
+													<h3>User Permissions</h3>
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Create User" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Create User </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to create a new User</h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Delete User" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Delete User </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to delete User</h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-sm-4">
+													
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="View Users" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;">
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;"> View Users </h2>
+																</label>
+															  </div>
+															
+															<h5 class=" mb-3">Be able to view all User details </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+											<hr>
+<!-------------------------------------------------------Role permissions  ----------------------------------------------------------------->
+											
+											<div class="row">
+												<div class="col-sm-4">
+													<h3>Roles Permissions</h3>
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Create Role" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Create Role </h2>
+																</label>
+															</div>
+															
+															<h5 class=" mb-3">Be able to create a new Role</h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card">
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Delete Role" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;">Delete Role </h2>
+																</label>
+															</div>
+															
+															<h5 class=" mb-3">Be able to delete Role</h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-sm-4">
+													
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="Edit Roles" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;"> Edit Roles </h2>
+																</label>
+															</div>
+															
+															<h5 class=" mb-3">Be able to edit role details </h5>
+															
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="card" >
+														<div class="card-body">
+															<div class="form-check">
+																<input class="form-check-input" type="checkbox" value="View Roles" name="checks" id="flexCheckDefault" style="width: 20px; height:20px;" >
+																<label class="form-check-label" for="flexCheckDefault">
+																	<h2 class=" mb-3" style="padding-left: 15px;"> View Roles </h2>
+																</label>
+															</div>
+															
+															<h5 class=" mb-3">Be able to View role details </h5>
+															
+														</div>
+													</div>
+												</div>
+											</div>
+											<hr>
+
+
+											
+											<button type="submit" class="btn btn-primary" style="background-color: #242939;">Submit</button>
+											<div class="close_form" style="padding-top: 10px;">
+												<i class="fas fa-times fa-lg"></i>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div> {% endcomment %}
+
+					
+					{% for message in messages %}
+					{{ message }}
+					{% endfor %}
+
+
+					<div>
+						<a class="btn-2 " type="button" href="{% url 'settings'%}"  style="padding: 0,0,0,0;">
+							<div class="text">Go Back</div>
+						</a>
+					</div>
+			</main>
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted">
+						<div class="col-6 text-left">
+							<p class="mb-0">
+								<a href="index.html" class="text-muted"><strong>Requin Demo</strong></a> &copy;
+							</p>
+						</div>
+						<div class="col-6 text-right">
+							<ul class="list-inline">
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Support</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Help Center</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Privacy</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Terms</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="{% static 'js/app.js' %}"></script>
+
+
+    {% comment %} <script type ="text/JavaScript">
+        $(".btn-1").click(function(){
+            $(".create_role").toggle("slide")
+        });
+        $(".close_form").click(function(){
+            $(".create_role").toggle("slide")
+        });
+
+    </script> {% endcomment %}
+		
+{% else %}
+<h1>Please Login to Continue. <a href="{% url 'index' %}">Login</a></h1>
+{% endif %}
+
+</body>
+
+</html>

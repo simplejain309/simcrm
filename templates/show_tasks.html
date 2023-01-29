@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+	<meta name="author" content="AdminKit">
+	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+	<link rel="shortcut icon" href="{% static 'img/icons/icon-48x48.png' %}" />
+
+	<title>CRM</title>
+
+	<link href="{% static 'css/app.css' %}" rel="stylesheet">
+	<link href="{% static 'css/style.css' %}" rel="stylesheet">
+	<link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
+
+
+	<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script> 
+
+	<style>
+
+		.dropbtn12 {
+		background-color: #2B60DE;
+		color: white;
+		font-size: 16px;
+		border: none;
+		height: 35px;
+		width: 105px;
+		}
+
+		.dropdown12 {
+		position: relative;
+		display: inline-block;
+		}
+
+		.dropdown-content12 {
+		display: none;
+		position: absolute;
+		background-color: #f1f1f1;
+		min-width: 105px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 1;
+		}
+
+		.dropdown-content12 a {
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		}
+
+		.dropdown-content12 a:hover {background-color: #ddd;}
+
+		.dropdown12:hover .dropdown-content12 {display: block;}
+
+		.dropdown12:hover .dropbtn12 {background-color: #2B60DE;}
+
+	</style>
+
+	
+</head>
+
+<body>
+	{% if user.is_authenticated %}
+		
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="{%  url 'dashboard' %}">
+          <span class="align-middle">Requin</span>
+        </a>
+
+				<ul class="sidebar-nav">
+					<li class="sidebar-header">
+						Pages
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'dashboard' %}">
+              				<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+            			</a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/profile/{{ user.username }}">
+              				<i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+            			</a>
+					</li>
+
+					
+					{% if perms.auth.view_user or perms.crmApp.view_role %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'settings' %}">
+              				<i class="align-middle" data-feather="settings"></i> 
+							  	<span class="align-middle">Settings</span>
+            			</a>
+					</li>
+					{% endif %}
+					{% if perms.crmApp.view_client %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_clients_cards' %}">
+              				<i class="align-middle" data-feather="users"></i> 
+							  	<span class="align-middle">Clients</span>
+            			</a>
+					</li>
+					{% endif %}
+					
+
+					{% if perms.crmApp.view_task %}
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="{% url 'show_tasks' %}">
+              				<i class="align-middle" data-feather="book"></i> 
+							  	<span class="align-middle">Tasks</span>
+            			</a>
+					</li>
+					{% else %}
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="/show_particular_task/{{ user.username }}">
+              				<i class="align-middle" data-feather="book"></i> 
+							  	<span class="align-middle">Tasks</span>
+            			</a>
+					</li>
+					{% endif %}
+
+					{% if perms.crmApp.view_grouptable and perms.crmApp.add_grouptable %}
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="/show_groups/{{ user.username }}">
+              				<i class="align-middle" data-feather="users"></i> 
+							  	<span class="align-middle">Groups</span>
+            			</a>
+					</li>
+					{% elif perms.crmApp.view_grouptable %}
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="/show_tl_group/{{ user.username }}">
+              				<i class="align-middle" data-feather="users"></i> 
+							  	<span class="align-middle">My Group</span>
+            			</a>
+					</li>
+					{% endif %}
+					
+					{% if perms.crmApp.view_payment %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_payments' %}">
+              				<i class="align-middle" data-feather="dollar-sign"></i> 
+							  	<span class="align-middle">Payments</span>
+            			</a>
+					</li>
+					{% endif %}
+					{% if perms.crmApp.view_employee %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_employee_cards' %}">
+              				<i class="align-middle" data-feather="slack"></i> 
+							  	<span class="align-middle">Employees</span>
+            			</a>
+					</li>
+					{% endif %}
+					{% if perms.crmApp.view_attendance_table %}
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'show_attendance' %}">
+              				<i class="align-middle" data-feather="activity"></i> 
+							  	<span class="align-middle">Attendance</span>
+            			</a>
+					</li>
+					{% endif %}
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'maps' %}">
+              				<i class="align-middle" data-feather="map"></i> 
+							  	<span class="align-middle">Maps</span>
+            			</a>
+					</li>
+			</div>
+		</nav>
+
+		<div class="main">
+			<nav class="navbar navbar-expand navbar-light navbar-bg">
+				<a class="sidebar-toggle d-flex">
+          <i class="hamburger align-self-center"></i>
+        </a>
+
+				<form class="d-none d-sm-inline-block">
+					<div class="input-group input-group-navbar">
+						<input type="text" class="form-control" placeholder="Search…" aria-label="Search">
+						<button class="btn" type="button">
+              <i class="align-middle" data-feather="search"></i>
+            </button>
+					</div>
+				</form>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav navbar-align">
+
+			<!-- ====================================Notification Bell icon ================================== -->
+					
+			<li class="nav-item dropdown">
+				<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown">
+					<div class="position-relative">
+						<i class="align-middle" data-feather="bell"></i>
+						<span id="indicator" class="indicator"></span>
+					</div>
+				</a>
+				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0" aria-labelledby="alertsDropdown">
+
+					<div class="dropdown-menu-header">
+						 Notifications
+					</div>
+
+					<div id="main_div" class="list-group">
+						
+
+					</div>
+				</div>
+			</li>
+
+					<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+					<script>
+						function lw(){
+
+							$.ajax({
+								data: $(this).serialize(), // get the form data
+								url: "{% url 'show_notifications' %}",
+								// on success
+								success: function (response) {
+
+									document.getElementById("indicator").innerHTML = response.counts
+									document.getElementById("main_div").innerHTML = ""
+									for (let i = 0; i < response.all_users.length; i++) {
+										
+										var row_div = document.createElement("div")
+										var row_id = "row_div"+i;
+										row_div.setAttribute("id",row_id);
+										document.getElementById("main_div").appendChild(row_div)
+										document.getElementById(row_id).classList.remove("row");
+										document.getElementById(row_id).classList.remove("g-0");
+										document.getElementById(row_id).classList.remove("align-items-center");
+										document.getElementById(row_id).className += "row";
+										document.getElementById(row_id).className += " g-0";
+										document.getElementById(row_id).className += " align-items-center";
+
+										var col_div2 = document.createElement("div")
+										var col_id2 = "col_div2_"+i;
+										col_div2.setAttribute("id",col_id2);
+										document.getElementById(row_id).appendChild(col_div2)
+										document.getElementById(col_id2).classList.remove("col");
+										document.getElementById(col_id2).classList.remove("align-items-center");
+										document.getElementById(col_id2).className += "col";
+										document.getElementById(col_id2).className += " align-items-center";
+										document.getElementById(col_id2).style.paddingLeft = "20px";
+
+										var btn = document.createElement("P");
+										var ids = "id"+i;
+										btn.setAttribute("id", ids);
+										document.getElementById(col_id2).appendChild(btn);
+										document.getElementById(ids).classList.remove("text-dark");
+										document.getElementById(ids).className += "text-dark";
+
+										var btn1 = document.createElement("P");
+										var idss = "ids"+i;
+										btn1.setAttribute("id", idss);
+										document.getElementById(col_id2).appendChild(btn1);
+										document.getElementById(idss).classList.remove("text-muted");
+										document.getElementById(idss).className += "text-muted";
+
+										document.getElementById(ids).innerHTML=""
+										document.getElementById(idss).innerHTML=""
+
+										document.getElementById(ids).innerHTML = response.all_users[i]['fields']['message']
+
+										document.getElementById(idss).innerHTML = "At: "+ response.all_users[i]['fields']['m_time']
+
+										var links = document.createElement("A");
+										links.innerHTML = "     Mark as Read";
+										links.setAttribute("href","javascript:mark("+response.all_users[i]['pk']+");")
+										var link_id = "mark_link"+i;
+										links.setAttribute("id",link_id)
+										var req_link = "javascript:mark("+response.all_users[i]['pk']+");"
+							
+										document.getElementById(idss).appendChild(links);
+
+									}
+
+								},
+								
+								error: function (response) {
+									
+									console.log(response.responseJSON.errors)
+								}
+							});
+
+							return false;
+						}
+					</script>
+
+					<script>
+
+						lw();
+						setInterval(function(){	lw(); },5000);
+
+					</script>
+
+					<script>
+						function mark(pk_id){
+							$.ajax({
+									data: $(this).serialize(), // get the form data
+									url: "/mark_read/"+pk_id,
+									// on success
+									success: function (response) {
+										
+										if (response.marked == true) {
+											
+											alert("Notification Read");
+											
+										}
+										else {
+
+											alert("Failure");
+										}
+
+									},
+									// on error
+									error: function (response) {
+										// alert the error if any error occured
+										console.log(response.responseJSON.errors)
+									}
+								});
+
+						}
+						</script>
+
+				<!-- ====================================Notification Bell icon Stops ================================== -->
+						
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-toggle="dropdown">
+                				<i class="align-middle" data-feather="settings"></i>
+              				</a>
+
+							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">{{ user.username }}&nbsp;
+                				 
+									<span class="text-dark" data-feather="user">{{ user.username }}</span>
+              				</a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile</a>
+								<a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="pie-chart"></i> Analytics</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="pages-settings.html"><i class="align-middle mr-1" data-feather="settings"></i> Settings & Privacy</a>
+								<a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="help-circle"></i> Help Center</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+							</div>
+						</li>
+						
+					</ul>
+				</div>
+			</nav>
+
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<h1 class="h3 mb-3">Tasks</h1>
+					{% if perms.crmApp.view_task %}
+
+<!-- ===============================================File Downloader ===============================================-->
+							{% if perms.crmApp.change_task %}
+							<div class="dropdown12">
+							<button class="dropbtn12 btn btn-primary">Export</button>
+							<div class="dropdown-content12">
+								<a id="json" href='javascript:;' onclick="into_json();">TO JSON</a>
+								<a id="txt" href='javascript:;' onclick="into_txt();">TO TEXT</a>
+								<a id="csv" href='javascript:;' onclick="into_csv();">TO CSV</a>
+								<a id="pdf12" href='javascript:;' onclick="into_pdf();">TO PDF</a>
+							</div>
+							</div><br><br>
+
+							<script>
+								function into_json(){
+									$("#example").tableHTMLExport({type:'json',filename:'Data.json'});
+								}
+								function into_txt(){
+									$("#example").tableHTMLExport({type:'txt',filename:'Data.txt'});
+								}
+								function into_csv(){
+									$("#example").tableHTMLExport({type:'csv',filename:'Data.csv'});
+								}
+							</script>
+
+							<script>
+
+							    function into_pdf() {
+										var dataSource = shield.DataSource.create({
+											data: "#example",
+											schema: {
+												type: "table",
+												fields: {
+													'Client Name': { type: String },
+													'Task Name': { type: String },
+													'Task Created By': { type: String },
+													'Soft Deadline': { type: String },
+													'Status': { type: String }
+												}
+											}
+										});
+
+										dataSource.read().then(function (data) {
+											var pdf = new shield.exp.PDFDocument({
+												author: "Devnote",
+												created: new Date()
+											});
+
+											pdf.addPage("a4", "portrait");
+
+											pdf.table(
+												50,
+												50,
+												data,
+												[
+													{ field: "Client Name", title: "Client Name", width: 100 },
+													{ field: "Task Name", title: "Task Name", width: 100 },
+													{ field: "Task Created By", title: "Task Created By", width: 100 },
+													{ field: "Soft Deadline", title: "Soft Deadline", width: 100 },
+													{ field: "Status", title: "Status", width: 100 }
+												],
+												{
+													margins: {
+														top: 50,
+														left: 50
+													}
+												}
+											);
+
+											pdf.saveAs({
+												fileName: "Data.pdf"
+											});
+										});
+								}
+							</script>
+{% endif %}
+<!-- ===============================================File Downloader ===============================================-->
+
+						<div class="col-12 ">
+							<div class="card" style="padding:20px 10px 20px 10px;">
+							<div class="table-responsive">
+								<table id="example" class="table table-striped table-hover table-responsive " >
+									<thead>
+										<tr align='center'>
+											<th>Client Name</th>
+											<th style="width: 20%;">Task Name</th>
+											   {% if perms.crmApp.change_task %}
+
+											<th  style="width: 30%;">Task Created By</th>
+									{% else %}
+											<th style="width:30%;">Assigned To </th>
+									{% endif %}		
+											<th style="width: 20%;">Soft Deadline</th>
+											<th style="width: 20%;">Status</th>
+											{% if perms.crmApp.change_task or perms.crmApp.delete_task %}
+											<th  style="width: 20%;">Actions</th>
+											{% endif %}
+
+										</tr>
+									</thead>
+									<tfoot style="display: table-header-group;">
+										<tr>
+											<th></th>
+											<th></th>
+											<th></th>
+											<th>Soft Deadline</th>
+										
+											<th>status</th>				
+											
+  {% if perms.crmApp.change_task or perms.crmApp.delete_task %}
+                                                                                        <th  style="width: 20%;"></th>
+                                                                                        {% endif %}
+
+										
+										</tr>
+									</tfoot>
+									<tbody align='center'>
+										{% for entry in entries %}
+										<tr >
+											<td style="width: 20%;" ><a href="show_client_details/{{entry.client_id.pk}}">{{entry.client_id.c_name}}</a></td>
+											<td style="width: 20%; word-wrap: break-word;"><a href="show_task_details/{{entry.pk}}">{{entry.t_name}}</a></td>
+											
+											{% if perms.crmApp.change_task or perms.crmApp.delete_task %}
+
+											<td class="align-middle" style="width: 30%;">{{entry.t_created_by}}</td>										
+
+{% else %}
+{% for et in employee_task_details %}
+<td style="width: 20%;">{{ et.task_id.tl_id.e_name }}</td>
+{% endfor %}
+
+
+
+
+
+
+{% endif %}
+											<td class="align-middle" style="width: 20%;">{{entry.t_soft}}</td>
+
+											{% if entry.t_status == 'Unassigned' %}
+											<td style="width: 20%;"><span class="badge bg-danger" style="width:70%;">{{entry.t_status}}</span></td>
+											{% elif entry.t_status == 'Assigned' %}
+											<td style="width: 20%;"><span class="badge bg-primary" style="width:70%;">{{entry.t_status}}</span></td>
+											{% elif entry.t_status == 'In-Progress' %}
+											<td style="width: 20%;"><span class="badge bg-white text-dark" style="width:70%;">{{entry.t_status}}</span></td>
+											{% elif entry.t_status == 'Quality-Check' %}
+											<td style="width: 20%;"><span class="badge" style="background-color: #FF4500;width:70%;">{{entry.t_status}}</span></td>
+											{% elif entry.t_status == 'Quality Check' %}
+											<td style="width: 20%;"><span class="badge" style="background-color: #FF4500;width:70%;">{{entry.t_status}}</span></td>
+											{% elif entry.t_status == 'Incomplete' %}
+											<td style="width: 20%;"><span class="badge bg-warning" style="width:70%;">{{entry.t_status}}</span></td>
+											{% elif entry.t_status == 'Delivered' %}
+											<td style="width: 20%;"><span class="badge bg-success" style="width:70%;">{{entry.t_status}}</span></td>
+											{% elif entry.t_status == 'Completed' %}
+											<td style="width: 20%;"><span class="badge bg-info text-dark" style="width:70%;">{{entry.t_status}}</span></td>
+											{% endif %}
+
+											<td class="table-action" style="text-align:center;">
+												{% if perms.crmApp.change_task %}
+												<a href="update_task/{{ entry.pk }}"><i class="align-center" data-feather="edit-2"></i></a>
+												&nbsp;&nbsp;
+												{% endif %}
+												{% if perms.crmApp.delete_task %}
+												<a href="/delete_task/{{ entry.pk }}" onclick="return confirm('Are You sure you want to delete');"><i class="align-center" data-feather="trash"></i></a>
+												{% endif %}
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+									
+								</table>
+								</div>
+							</div>
+						</div>
+
+					{% else %}
+
+
+
+
+
+
+
+						<div class="col-12 ">
+							<div class="card" style="padding:20px 10px 20px 10px;">
+								<div class = "table-responsive">
+									<table id="example1" class="table table-striped table-hover " >
+										<thead align='center'>
+											<tr>
+												<th>Task Name</th>
+												<th>Deadline</th>
+												<th>Word Count</th>
+												<th>Assigned By</th>
+												{% if val1 %}
+												<th>Assigned To</th>
+												{% endif %}
+												{% if val1 %}
+												<th>Assigned To</th>
+												{% endif %}
+												{% if val2 %}
+												<th>Assigned To</th>
+												{% endif %}
+												<th>Status</th>
+											</tr>
+										</thead>
+
+										{% if val1 %}
+										<tfoot style="display: table-header-group;" align="center">
+										<tr>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										</tr>
+										</tfoot>
+										{% endif %}
+
+										{% if val2 %}
+										<tfoot style="display: table-header-group;" align="center">
+										<tr>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										</tr>
+										</tfoot>
+										{% endif %}
+
+										{% if val3 %}
+										<tfoot style="display: table-header-group;" align="center">
+										<tr>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										</tr>
+										</tfoot>
+										{% endif %}
+
+										<tbody align='center'>
+											{% for entry in employee_task_details %}
+											<tr>
+												<td style="width: 20%;"><a href="/show_employee_details/assigned_task_details/{{entry.pk}}">{{entry.at_name}}</a></td>
+												<td style="width: 10%;">{{entry.at_soft}}</td>
+												<td style="width: 15%;">{{entry.task_id.t_wc}}</td>
+
+												{% if val1 %}
+													<td style="width: 20%;">{{ admin }}</td>
+													{% if entry.tl_id %}
+														<td style="width: 20%;">{{ entry.tl_id.e_name }}</td>
+													{% else %}
+														<td style="width: 20%;"></td>
+													{% endif %}
+													{% if entry.expert_id %}
+														<td style="width: 20%;">{{ entry.expert_id.e_name }}</td>
+													{% else %}
+														<td style="width: 20%;"></td>
+													{% endif %}
+												{% endif %}
+
+												{% if val2 %}
+													{% if entry.manager_id.e_name %}
+														<td style="width: 20%;">{{ entry.manager_id.e_name }}</td>
+													{% else %}
+														<td style="width: 20%;">Admin</td>
+													{% endif %}
+
+													{% if entry.expert_id %}
+														<td style="width: 20%;">{{ entry.expert_id.e_name }}</td>
+													{% else %}
+														<td style="width: 20%;"></td>
+													{% endif %}
+												{% endif %}
+
+												{% if val3 %}
+													{% if entry.manager_id %}
+														<td style="width: 20%;">{{ entry.manager_id.e_name }}</td>
+													{% elif entry.tl_id %}
+														<td style="width: 20%;">{{ entry.tl_id.e_name }}</td>
+													{% else %}
+														<td style="width: 20%;">Admin</td>
+													{% endif %}
+												{% endif %}
+												
+												{% if entry.task_id.t_status == 'Unassigned' %}
+												<td class="table-action" style="text-align:center;"><span class="badge bg-danger" style="width:80%;">{{entry.task_id.t_status}}</span></td>
+												{% elif entry.task_id.t_status == 'Assigned' %}
+												<td class="table-action" style="text-align:center;"><span class="badge bg-primary" style="width:80%;">{{entry.task_id.t_status}}</span></td>
+												{% elif entry.task_id.t_status == 'In-Progress' %}
+												<td class="table-action" style="text-align:center;"><span class="badge bg-white text-dark" style="width:80%;">{{entry.task_id.t_status}}</span></td>
+												{% elif entry.task_id.t_status == 'Quality-Check' %}
+												<td class="table-action" style="text-align:center;"><span class="badge" style="background-color: #FF4500;width:80%;">{{entry.task_id.t_status}}</span></td>
+												{% elif entry.task_id.t_status == 'Quality Check' %}
+												<td class="table-action" style="text-align:center;"><span class="badge" style="background-color: #FF4500;width:80%;">{{entry.task_id.t_status}}</span></td>
+												{% elif entry.task_id.t_status == 'Incomplete' %}
+												<td class="table-action" style="text-align:center;"><span class="badge bg-warning" style="width:80%;">{{entry.task_id.t_status}}</span></td>
+												{% elif entry.task_id.t_status == 'Delivered' %}
+												<td class="table-action" style="text-align:center;"><span class="badge bg-success" style="width:80%;">{{entry.task_id.t_status}}</span></td>
+												{% elif entry.task_id.t_status == 'Completed' %}
+												<td class="table-action" style="text-align:center;"><span class="badge bg-info text-dark" style="width:80%;">{{entry.task_id.t_status}}</span></td>
+												{% endif %}
+											</tr>
+											{% endfor %}
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+
+
+<!-- ========================================Bulk Task Creation==================================================== -->
+
+					{% if perms.crmApp.add_task %}
+					<div class="create">
+                        <a class="btn-5" href="#" style="padding: 0,0,0,0;">
+                            <div class="text">Bulk Task Creation</div>
+                        </a>
+                    </div>
+					
+					<div class="bulk_tasks">
+						<div class="row">
+							<div class="col-12 ">
+								<div class="card">
+									<div class="card-header" style="background-color:#222e3c">
+										<h5 class="card-title" style="font-size: medium; font-weight: bold; color: white">Bulk Task Creation</h5>
+									</div>
+									<div class="card-body" style="background-color: white;">
+										
+										<form action="/bulk_task_creation" method="POST" enctype="multipart/form-data">
+											{% csrf_token %}
+											
+											<div class="mb-3">
+											<label>Select the Excel File to Upload:</label>
+											</div>
+
+											<div class="mb-3">
+												<input type="file" min="1" name="bulk_tasks" class="form-control" placeholder="Choose a CSV File" style="width: min-content; " required>
+											</div><br>
+
+											<button type="submit" class="btn btn-primary" style="background-color: #242939;">Submit</button>
+											<div class="close_bulk_task" style="padding-top: 20px;">
+												<i class="fas fa-times fa-lg"></i>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+<!-- ========================================Bulk Task Creation==================================================== -->
+
+<!-- ======================================== Revoke Task ==================================================== -->
+
+					{% if perms.crmApp.add_assignedtasktable %}
+					<div class="create">
+                        <a class="btn-6" href="#" style="padding: 0,0,0,0;">
+                            <div class="text">Revoke Task</div>
+                        </a>
+                    </div>
+					
+					<div class="revoke_tasks">
+						<div class="row">
+							<div class="col-12 ">
+								<div class="card">
+									<div class="card-header" style="background-color:#222e3c">
+										<h5 class="card-title" style="font-size: medium; font-weight: bold; color: white">Revoke Tasks</h5>
+									</div>
+									<div class="card-body" style="background-color: white;">
+										
+										<form action="/revoke_tasks/{{ user.username }}" method="POST">
+											{% csrf_token %}
+											
+											<div class="mb-3">
+											<label>Select the Task to Revoke:</label>
+											</div>
+
+											<div class="mb-3">
+
+												<select class="form-control" id="inputGroupSelect01" name="task_name" required>
+
+													<option selected disabled>Select task</option>
+													{% for i in entries %}
+													<option value="{{i.pk}}">{{i.pk}}&nbsp;{{i.t_name}}</option>
+													{% endfor %}
+
+													{% for i in employee_task_details %}
+													<option value="{{i.task_id.pk}}">{{i.task_id.pk}}&nbsp;{{i.task_id.t_name}}</option>
+													{% endfor %}
+
+												</select>
+
+											</div><br>
+
+											<button type="submit" class="btn btn-primary" style="background-color: #242939;">Revoke</button>
+											<div class="close_revoke_tasks" style="padding-top: 20px;">
+												<i class="fas fa-times fa-lg"></i>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+<!-- ======================================== Revoke Task End ==================================================== -->
+
+
+
+					{% if perms.crmApp.add_assignedtasktable %}
+					<div class="create">
+                        <a class="btn-3 " href="#" style="padding: 0,0,0,0;">
+                            <div class="text">Assign Task</div>
+                        </a>
+                    </div>
+					
+					<div class="Assign_task">
+						<div class="row">
+							<div class="col-12 ">
+								<div class="card">
+									<div class="card-header" style="background-color:#222e3c">
+										<h5 class="card-title" style="font-size: medium; font-weight: bold; color: white">Assign Task</h5>
+									</div>
+									<div class="card-body" style="background-color: white;">
+										
+										<form action="/assign_particular_task/{{ user.username }}" method="POST">
+											{% csrf_token %}
+											
+											<div class=" mb-3">
+                            
+												<select class="form-control" name="t_name"id="inputGroupSelect01">
+												  <option selected disabled>Select task</option>
+												  {% for i in entries %}
+												  <option value="{{i.pk}}">{{i.pk}}&nbsp;{{i.t_name}}</option>
+												  {% endfor %}
+
+												  {% for i in employee_task_details %}
+												  <option value="{{i.task_id.pk}}">{{i.task_id.pk}}&nbsp;{{i.task_id.t_name}}</option>
+												  {% endfor %}
+												</select>
+											</div>
+											<div class=" mb-3">
+                            
+												<select class="form-control" name="e_name"id="inputGroupSelect01" style="width: min-content;">
+												  <option selected disabled>Select Employee</option>
+
+												  {% for i in employee_det %}
+												        <option value="{{ i.pk }}">{{ i.id }}&nbsp;{{ i.e_name }}</option>
+												  {% endfor %}
+
+												  {% for i in tl_list %}
+													{% for j in i %}
+												        <option value="{{ j.emp_id.pk }}">{{ j.emp_id.id }}&nbsp;{{ j.emp_id.e_name }}</option>
+												  	{% endfor %}
+												  {% endfor %}
+
+												  {% for i in expert_list %}
+													{% for j in i %}
+												        <option value="{{ j.emp_id.pk }}">{{ j.emp_id.id }}&nbsp;{{ j.emp_id.e_name }}</option>
+												  	{% endfor %}
+												  {% endfor %}
+
+												  {% for i in grp_mem_list %}
+													{% for j in i %}
+												        <option value="{{ j.emp_id.pk }}">{{ j.emp_id.id }}&nbsp;{{ j.emp_id.e_name }}</option>
+												  	{% endfor %}
+												  {% endfor %}
+												</select>
+											</div>
+											<br>
+											<button type="submit" class="btn btn-primary" style="background-color: #242939;">Submit</button>
+											<div class="close_task" style="padding-top: 20px;">
+												<i class="fas fa-times fa-lg"></i>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+				
+
+
+						{% if perms.crmApp.view_client %}
+						<div>
+							<a class="btn-2 " type="button" href="{% url 'show_clients_cards' %}"  style="padding: 0,0,0,0;">
+								<div class="text">Go Back</div>
+							</a>
+						</div>
+						{% else %}
+						<div>
+							<a class="btn-2 " type="button" href="{% url 'dashboard' %}"  style="padding: 0,0,0,0;">
+								<div class="text">Go Back</div>
+							</a>
+						</div>
+						{% endif %}
+					</div>
+
+					{% if perms.crmApp.add_task %}
+					<div class="create">
+                        <a class="btn-1 " href="#" style="padding: 0,0,0,0;">
+                            <div class="text">Create Task</div>
+                        </a>
+                    </div>
+                    <div class="create_form">
+						<div class="row">
+							<div class="col-12 ">
+								<div class="card">
+									<div class="card-header" style="background-color:#222e3c">
+										<h5 class="card-title" style="font-size: medium; font-weight: bold; color: white">Create Task</h5>
+									</div>
+									<div class="card-body" style="background-color: white;">
+										
+										<form action="create_task" method="POST" enctype="multipart/form-data">
+											{% csrf_token %}
+											<div class="mb-3">
+												<input type="name" name="t_name" class="form-control" placeholder="Name" style="width: min-content;" required>
+											</div>
+											<div class="mb-3">
+												<input  name="t_soft" class="form-control"  placeholder="Soft Deadline" type="text"  onfocus="(this.type='date')"style="width: min-content;" required>
+											</div>
+											<div class="mb-3">
+												<input  name="t_hard" class="form-control"  placeholder="Hard Deadline" type="text"  onfocus="(this.type='date')"style="width: min-content;" required>
+											</div>
+											<div class="mb-3">
+												<input type="number" min="1" name="t_wc" class="form-control" placeholder="Word Count" style="width: min-content;" required>
+											</div>
+											<div class="mb-3">
+												<input type="number" min="0" name="t_amount" class="form-control" placeholder=" Task Amount" style="width: min-content; height: 40px;" required>
+											</div>
+
+											<div class="mb-3">
+
+												<select class="form-control" name="currency" id="inputGroupSelect01" style="width: 225px;" required>
+													<option value="USD" selected="selected">United States Dollars</option>
+													<option value="EUR">Euro</option>
+													<option value="GBP">United Kingdom Pounds</option>
+													<option value="DZD">Algeria Dinars</option>
+													<option value="ARP">Argentina Pesos</option>
+													<option value="AUD">Australia Dollars</option>
+													<option value="ATS">Austria Schillings</option>
+													<option value="BSD">Bahamas Dollars</option>
+													<option value="BBD">Barbados Dollars</option>
+													<option value="BEF">Belgium Francs</option>
+													<option value="BMD">Bermuda Dollars</option>
+													<option value="BRR">Brazil Real</option>
+													<option value="BGL">Bulgaria Lev</option>
+													<option value="CAD">Canada Dollars</option>
+													<option value="CLP">Chile Pesos</option>
+													<option value="CNY">China Yuan Renmimbi</option>
+													<option value="CYP">Cyprus Pounds</option>
+													<option value="CSK">Czech Republic Koruna</option>
+													<option value="DKK">Denmark Kroner</option>
+													<option value="NLG">Dutch Guilders</option>
+													<option value="XCD">Eastern Caribbean Dollars</option>
+													<option value="EGP">Egypt Pounds</option>
+													<option value="FJD">Fiji Dollars</option>
+													<option value="FIM">Finland Markka</option>
+													<option value="FRF">France Francs</option>
+													<option value="DEM">Germany Deutsche Marks</option>
+													<option value="XAU">Gold Ounces</option>
+													<option value="GRD">Greece Drachmas</option>
+													<option value="HKD">Hong Kong Dollars</option>
+													<option value="HUF">Hungary Forint</option>
+													<option value="ISK">Iceland Krona</option>
+													<option value="INR">India Rupees</option>
+													<option value="IDR">Indonesia Rupiah</option>
+													<option value="IEP">Ireland Punt</option>
+													<option value="ILS">Israel New Shekels</option>
+													<option value="ITL">Italy Lira</option>
+													<option value="JMD">Jamaica Dollars</option>
+													<option value="JPY">Japan Yen</option>
+													<option value="JOD">Jordan Dinar</option>
+													<option value="KRW">Korea (South) Won</option>
+													<option value="LBP">Lebanon Pounds</option>
+													<option value="LUF">Luxembourg Francs</option>
+													<option value="MYR">Malaysia Ringgit</option>
+													<option value="MXP">Mexico Pesos</option>
+													<option value="NLG">Netherlands Guilders</option>
+													<option value="NZD">New Zealand Dollars</option>
+													<option value="NOK">Norway Kroner</option>
+													<option value="PKR">Pakistan Rupees</option>
+													<option value="XPD">Palladium Ounces</option>
+													<option value="PHP">Philippines Pesos</option>
+													<option value="XPT">Platinum Ounces</option>
+													<option value="PLZ">Poland Zloty</option>
+													<option value="PTE">Portugal Escudo</option>
+													<option value="ROL">Romania Leu</option>
+													<option value="RUR">Russia Rubles</option>
+													<option value="SAR">Saudi Arabia Riyal</option>
+													<option value="XAG">Silver Ounces</option>
+													<option value="SGD">Singapore Dollars</option>
+													<option value="SKK">Slovakia Koruna</option>
+													<option value="ZAR">South Africa Rand</option>
+													<option value="KRW">South Korea Won</option>
+													<option value="ESP">Spain Pesetas</option>
+													<option value="XDR">Special Drawing Right (IMF)</option>
+													<option value="SDD">Sudan Dinar</option>
+													<option value="SEK">Sweden Krona</option>
+													<option value="CHF">Switzerland Francs</option>
+													<option value="TWD">Taiwan Dollars</option>
+													<option value="THB">Thailand Baht</option>
+													<option value="TTD">Trinidad and Tobago Dollars</option>
+													<option value="TRL">Turkey Lira</option>
+													<option value="VEB">Venezuela Bolivar</option>
+													<option value="ZMK">Zambia Kwacha</option>
+													<option value="EUR">Euro</option>
+													<option value="XCD">Eastern Caribbean Dollars</option>
+													<option value="XDR">Special Drawing Right (IMF)</option>
+													<option value="XAG">Silver Ounces</option>
+													<option value="XAU">Gold Ounces</option>
+													<option value="XPD">Palladium Ounces</option>
+													<option value="XPT">Platinum Ounces</option>
+												</select>
+
+											</div>
+
+											<div class="mb-3" style="margin-bottom: 0px;">
+												<textarea class="form-control" name = "t_desc" placeholder="Task Description" rows="1" style="width: max-content; height: 100px;" ></textarea>
+											</div>
+											<div class=" mb-3">
+                            
+												<select class="form-control" name="c_name" id="inputGroupSelect01" style="width: min-content;" required>
+												  <option selected disabled>Select Client</option>
+												  {% for i in ids %}
+												  <option value="{{i.pk}}">{{i.pk}}&nbsp;{{i.c_name}}</option>
+												  {% endfor %}
+												</select>
+											</div>
+											<div class=" mb-3">
+                            
+												<select class="form-control" name="p_status"id="inputGroupSelect01" style="width: min-content;">
+												  <option  selected>Select Payment Status</option>
+<option value="NA">Null</option>												 
+ <option value="Partial">Partial</option>
+												  <option value="Full">Full</option>
+												</select>
+											</div>
+											<div class=" mb-3">
+                            
+												<select class="form-control" name="t_status"id="inputGroupSelect01" style="width: min-content;" >
+												  <option value="Unassigned" selected>Select Task Status</option>
+												  <option value="Unassigned">Unassigned</option>
+												  <option value="Assigned">Assigned</option>
+												  <option value="In-Progress">In-Progress</option>
+												  <option value="Quality-Check">Quality-Check</option>
+												  <option value="Incomplete">Incomplete</option>
+												  <option value="Delivered">Delivered</option>
+												</select>
+											</div>
+											<div class="mb-3">
+												<input type="number" min="0" name="paid_amount" class="form-control" placeholder="Paid Amount" style="width: min-content;">
+											</div>
+											<div class="mb-3">
+												<input type="file" min="1" name="brief" class="form-control" placeholder="Choose Files" style="width: min-content; " multiple>
+											</div>
+											
+											<br>
+											<button type="submit" class="btn btn-primary" style="background-color: #242939;">Submit</button>
+											<div class="close_form" style="padding-top: 10px;">
+												<i class="fas fa-times fa-lg"></i>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+
+					{% for message in messages %}
+					{{ message }}
+					{% endfor %}
+			</main>
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted">
+						<div class="col-6 text-left">
+							<p class="mb-0">
+								<a href="index.html" class="text-muted"><strong>Requin Demo</strong></a> &copy;
+							</p>
+						</div>
+						<div class="col-6 text-right">
+							<ul class="list-inline">
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Support</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Help Center</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Privacy</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Terms</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="{% static 'js/app.js' %}"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+
+	<script src="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"></script>
+	<script src="//cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css"></script>
+	<script src="//cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script src="//cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+	<script src="//cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+ 
+	<script src="{% static 'js/tableHTMLExport.js' %}"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
+
+<script type ="text/JavaScript">
+	$(".btn-1").click(function(){
+		$(".create_form").toggle("slide")
+		
+	});
+	$(".close_form").click(function(){
+		$(".create_form").toggle("slide")
+		
+	});
+
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	$('#example').DataTable( {
+
+	initComplete: function () {
+
+		this.api().columns([0,1,3,4]).every( function () {
+			var column = this;
+			var select = $('<select><option value=""></option></select>')
+				.appendTo( $(column.footer()).empty() )
+				.on( 'change', function () {
+					var val = $.fn.dataTable.util.escapeRegex(
+						$(this).val()
+					);
+
+					column
+						.search( val ? '^'+val+'$' : '', true, false )
+						.draw();
+				} );
+
+			column.data().unique().sort().each( function ( d, j ) {
+				select.append( '<option>'+d+'</option>' )
+			} );
+		} );
+	}
+	
+} );
+} );
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	$('#example1').DataTable( {
+
+	initComplete: function () {
+
+		this.api().columns([3,4,5,6]).every( function () {
+			var column = this;
+			var select = $('<select><option value=""></option></select>')
+				.appendTo( $(column.footer()).empty() )
+				.on( 'change', function () {
+					var val = $.fn.dataTable.util.escapeRegex(
+						$(this).val()
+					);
+
+					column
+						.search( val ? '^'+val+'$' : '', true, false )
+						.draw();
+				} );
+
+			column.data().unique().sort().each( function ( d, j ) {
+				select.append( '<option>'+d+'</option>' )
+			} );
+		} );
+	}
+	
+} );
+} );
+</script>
+
+<script type ="text/JavaScript">
+        $(".btn-3").click(function(){
+            $(".Assign_task").toggle("slide")
+        });
+        $(".close_task").click(function(){
+            $(".Assign_task").toggle("slide")
+        });
+
+</script>
+
+<script type ="text/JavaScript">
+        $(".btn-5").click(function(){
+            $(".bulk_tasks").toggle("slide")
+        });
+        $(".close_bulk_task").click(function(){
+            $(".bulk_tasks").toggle("slide")
+        });
+
+</script>
+
+<script type ="text/JavaScript">
+        $(".btn-6").click(function(){
+            $(".revoke_tasks").toggle("slide")
+        });
+        $(".close_revoke_tasks").click(function(){
+            $(".revoke_tasks").toggle("slide")
+        });
+
+</script>
+
+
+	
+{% else %}
+<h1>Please Login to Continue. <a href="{% url 'index' %}">Login</a></h1>
+{% endif %}
+</body>
+
+</html>

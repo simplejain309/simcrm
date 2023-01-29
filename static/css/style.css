@@ -1,0 +1,346 @@
+.create .btn-1{
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    background-color:white;
+    color:#3c4043;
+    display:inline-flex;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64 ,67, 0.149);
+    transition:0.5s;
+    position:fixed;
+    right:20px;
+    bottom:80px;
+
+}
+
+.create .btn-1 .text{
+    margin-left: 1px;
+    font-family: Verdana, serif;
+    font-size: 14px;
+    line-height: 54px;
+    display: none;
+    
+}
+
+.create .btn-1::before{
+    /* background-image: url(http://www.gstatic.com/images/icons/material/colored_icons/1x/create_32dp.png); */
+    background-image: url(../img/icons/plus2.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 32px;
+    content: "";
+    min-width: 56px;
+    display: block;
+}
+
+.create .btn-1:hover{
+    background-position:10px;
+    width: 170px;
+    border-radius: 90px;
+    text-decoration: none;
+    background-color:#242939;
+}
+
+.create .btn-1:hover .text{
+    display: block;
+
+    color:white;
+}
+
+/* ============================================================================================== */
+
+
+.btn-2{
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    background-color:white;
+    color:#3c4043;
+    display:inline-flex;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64 ,67, 0.149);
+    transition:0.5s;
+    position:fixed;
+
+    bottom:80px;
+
+}
+
+.btn-2 .text{
+    margin-left: 1px;
+    font-family: Verdana, serif;
+    font-size: 14px;
+    line-height: 54px;
+    display: none;
+    
+}
+
+.btn-2::before{
+    background-image: url(../img/icons/back.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 15px;
+    content: "";
+    min-width: 56px;
+    display: block;
+}
+
+.btn-2:hover{
+    background-position:10px;
+    width: 140px;
+    border-radius: 90px;
+    text-decoration: none;
+    background-color:#242939;
+}
+
+.btn-2:hover .text{
+    display: block;
+
+    color:white;
+}
+
+.create_form{
+    position: fixed;
+    z-index: 1;
+    top: 63px;
+    right: 0;
+    display: none;
+    overflow:scroll;
+    width: 30%;
+    height: 100%;
+    transition:0.4s;
+
+    
+}
+.edit_form{
+    position: fixed;
+    z-index: 1;
+    top: 63px;
+    right: 0;
+    display: none;
+    overflow:scroll;
+    width: 30%;
+    height: 100%;
+    transition:0.4s;
+
+    
+}
+
+.slide{
+    right:0;
+}
+
+/* ============================================================================================== */
+
+.fas .fa-plus{
+    right: 20px;
+    bottom:80px;
+
+}
+
+
+.create .btn-3{
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    background-color:white;
+    color:#3c4043;
+    display:inline-flex;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64 ,67, 0.149);
+    transition:0.5s;
+    position:fixed;
+    right:20px;
+    top:80px;
+
+}
+
+.create .btn-3 .text{
+    margin-left: 1px;
+    font-family: Verdana, serif;
+    font-size: 14px;
+    line-height: 54px;
+    display: none;
+    
+}
+
+.create .btn-3::before{
+    /* background-image: url(http://www.gstatic.com/images/icons/material/colored_icons/1x/create_32dp.png); */
+    background-image: url(../img/icons/task.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 32px;
+    content: "";
+    min-width: 56px;
+    display: block;
+}
+
+.create .btn-3:hover{
+    background-position:10px;
+    width: 170px;
+    border-radius: 90px;
+    text-decoration: none;
+    background-color:#242939;
+}
+
+.create .btn-3:hover .text{
+    display: block;
+
+    color:white;
+}
+
+.Assign_task{
+    position: fixed;
+    z-index: 1;
+    top: 63px;
+    right: 0;
+    display: none;
+    overflow:scroll;
+    width: 30%;
+    height: 100%;
+    transition:0.4s;
+
+    
+}
+
+.create_role{
+    position: fixed;
+    z-index: 1;
+    top: 63px;
+    right: 0;
+    display: none;
+    overflow:scroll;
+    width: 80.5%;
+    height: 100%;
+    transition:0.4s;
+
+    
+}
+
+
+/* ======================================================================================================= */
+
+
+.create .btn-5{
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    background-color:white;
+    color:#3c4043;
+    display:inline-flex;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64 ,67, 0.149);
+    transition:0.5s;
+    position:fixed;
+    right:180px;
+    top:80px;
+
+}
+
+.create .btn-5 .text{
+    margin-left: 1px;
+    font-family: Verdana, serif;
+    font-size: 14px;
+    line-height: 54px;
+    display: none;
+    
+}
+
+.create .btn-5::before{
+    /* background-image: url(http://www.gstatic.com/images/icons/material/colored_icons/1x/create_32dp.png); */
+    background-image: url(../img/icons/bulk1.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 32px;
+    content: "";
+    min-width: 56px;
+    display: block;
+}
+
+.create .btn-5:hover{
+    background-position:10px;
+    width: 225px;
+    border-radius: 90px;
+    text-decoration: none;
+    background-color:#242939;
+}
+
+.create .btn-5:hover .text{
+    display: block;
+
+    color:white;
+}
+
+.bulk_tasks{
+    position: fixed;
+    z-index: 1;
+    top: 63px;
+    right: 0;
+    display: none;
+    overflow:scroll;
+    width: 30%;
+    height: 100%;
+    transition:0.4s;
+
+    
+}
+
+/* ============================================ btn-6 ================================================== */
+
+.create .btn-6{
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    background-color:white;
+    color:#3c4043;
+    display:inline-flex;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64 ,67, 0.149);
+    transition:0.5s;
+    position:fixed;
+    right:100px;
+    top:80px;
+
+}
+
+.create .btn-6 .text{
+    margin-left: 1px;
+    font-family: Verdana, serif;
+    font-size: 14px;
+    line-height: 54px;
+    display: none;
+    
+}
+
+.create .btn-6::before{
+    /* background-image: url(http://www.gstatic.com/images/icons/material/colored_icons/1x/create_32dp.png); */
+    background-image: url(../img/icons/turn_left.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 32px;
+    content: "";
+    min-width: 56px;
+    display: block;
+}
+
+.create .btn-6:hover{
+    background-position:10px;
+    width: 180px;
+    border-radius: 90px;
+    text-decoration: none;
+    background-color:#242939;
+}
+
+.create .btn-6:hover .text{
+    display: block;
+
+    color:white;
+}
+
+.revoke_tasks{
+    position: fixed;
+    z-index: 1;
+    top: 63px;
+    right: 0;
+    display: none;
+    overflow:scroll;
+    width: 30%;
+    height: 100%;
+    transition:0.4s;
+}
